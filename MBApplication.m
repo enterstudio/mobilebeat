@@ -60,7 +60,7 @@
 	[mainView setBackgroundColor: CGColorCreate( CGColorSpaceCreateDeviceRGB(), boxback)];
 	
 	//create the MBGridView
-	MBGridView *grid = [[MBGridView alloc] initWithFrame:CGRectMake(0.0,0.0,rect.size.width,rect.size.width)];
+	MBGridView *grid = [[MBGridView alloc] initWithFrame:CGRectMake(0.0,0.0,rect.size.width,rect.size.width-37)];
 	
 	[mainView addSubview:grid];
 	//[mainView addSubview:control];

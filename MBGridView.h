@@ -10,8 +10,9 @@
 
 @interface MBGridView : UIControl
 {
-	UIImage *thingImage;
 	struct CGRect _frame;
+	
+	NSMutableArray *data;
 }
 
 - (void)_drawGrid;

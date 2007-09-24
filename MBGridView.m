@@ -1,8 +1,13 @@
 #import <CoreFoundation/CoreFoundation.h>
+#import <CoreGraphics/CGColor.h>
+#import <CoreGraphics/CGGeometry.h>
 
 #import "MBGridView.h"
 
 #import <UIKit/UIBezierPath.h>
+
+#define GRID_WIDTH 8
+#define GRID_HEIGHT 8
 
 struct CGRect GSEventGetLocationInWindow(struct __GSEvent *ev);
 
@@ -22,6 +27,19 @@ struct CGRect GSEventGetLocationInWindow(struct __GSEvent *ev);
 	
 	_frame = frame;
 	
+	int i,j;
+	data = [[NSMutableArray alloc] initWithCapacity:GRID_WIDTH];
+	for(i = 0; i < GRID_WIDTH; i++){
+		NSMutableArray *temp = [[NSMutableArray alloc] initWithCapacity:GRID_HEIGHT];
+		for(j = 0; j < GRID_HEIGHT; j++){
+			NSNumber *new = [[NSNumber alloc] initWithBool:NO];
+			[temp addObject:new];
+			[new release];
+		}
+		[data addObject:temp];
+		[temp release];
+	}
+	
 	float boxback[4] = {1, 1, 1, 1};
 	[self setBackgroundColor: CGColorCreate( CGColorSpaceCreateDeviceRGB(), boxback)];	
 	
@@ -38,9 +56,6 @@ struct CGRect GSEventGetLocationInWindow(struct __GSEvent *ev);
 - (void)setTime:(float)time{
 	//time is a number between 0 and 1.
 }
-
-#define GRID_WIDTH 8
-#define GRID_HEIGHT 8
 
 - (void)_drawGrid{
 	//draw a grid of 1m x 1m squares.
@@ -82,6 +97,25 @@ struct CGRect GSEventGetLocationInWindow(struct __GSEvent *ev);
 
 - (void)_drawFilledIn{
 	//go through and draw fill in the ones that should be filled in.
+	float blueArray[4] = { 1.0f, 1.0f, 0.0f, 1.0f };
+	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+	CGContextSetFillColorWithColor( UICurrentContext(), CGColorCreate(colorSpace, blueArray) );
+	
+	int i,j;
+	for(i = 0; i < [data count]; i++){
+		for(j = 0; j < [[data objectAtIndex:i] count]; j++){
+			if(![[[data objectAtIndex:i] objectAtIndex:j] boolValue]) continue;
+			struct CGRect rect = CGRectMake(i * (_frame.size.width / GRID_WIDTH),
+											j * (_frame.size.height / GRID_HEIGHT),
+											_frame.size.width / GRID_WIDTH,
+											_frame.size.height / GRID_HEIGHT);
+			
+			CGContextFillRect( UICurrentContext(), rect );
+		}
+	}
+
+	//GBColorSpaceRelease(genericRGBSpace);
+	//[context release];
 }
 
 - (void)_drawPlayhead{
@@ -93,6 +127,18 @@ struct CGRect GSEventGetLocationInWindow(struct __GSEvent *ev);
 	struct CGRect rect = GSEventGetLocationInWindow(event);
 	NSLog(@"MBGridView: mouseDown:%d, %d", rect.origin.x, rect.origin.y);
 	CGPointMake(rect.origin.x, rect.origin.y);
+	
+	int xPos = (int)((rect.origin.x/_frame.size.width) * GRID_WIDTH);
+	int yPos = (int)((rect.origin.y/_frame.size.height) * GRID_HEIGHT);
+	
+	//x value first.
+	NSNumber *current = [[data objectAtIndex:xPos] objectAtIndex:yPos];
+	
+	NSNumber *new = [[NSNumber alloc] initWithBool:![current boolValue]];
+	
+	[[data objectAtIndex:xPos] replaceObjectAtIndex:yPos withObject:new];
+	
+	[new release];
 	[self setNeedsDisplay];
 	[super mouseDown:event];
 }
