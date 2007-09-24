@@ -97,7 +97,7 @@ struct CGRect GSEventGetLocationInWindow(struct __GSEvent *ev);
 
 - (void)_drawFilledIn{
 	//go through and draw fill in the ones that should be filled in.
-	float blueArray[4] = { 1.0f, 1.0f, 0.0f, 1.0f };
+	float blueArray[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
 	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 	CGContextSetFillColorWithColor( UICurrentContext(), CGColorCreate(colorSpace, blueArray) );
 	
@@ -122,6 +122,7 @@ struct CGRect GSEventGetLocationInWindow(struct __GSEvent *ev);
 	//blah.
 }
 
+BOOL repeatAction;
 - (void)mouseDown:(struct __GSEvent *)event
 {
 	struct CGRect rect = GSEventGetLocationInWindow(event);
@@ -131,10 +132,14 @@ struct CGRect GSEventGetLocationInWindow(struct __GSEvent *ev);
 	int xPos = (int)((rect.origin.x/_frame.size.width) * GRID_WIDTH);
 	int yPos = (int)((rect.origin.y/_frame.size.height) * GRID_HEIGHT);
 	
+	if(xPos > GRID_WIDTH || yPos > GRID_HEIGHT) return;
+	
 	//x value first.
 	NSNumber *current = [[data objectAtIndex:xPos] objectAtIndex:yPos];
 	
-	NSNumber *new = [[NSNumber alloc] initWithBool:![current boolValue]];
+	repeatAction = ![current boolValue];
+	
+	NSNumber *new = [[NSNumber alloc] initWithBool:repeatAction];
 	
 	[[data objectAtIndex:xPos] replaceObjectAtIndex:yPos withObject:new];
 	
@@ -143,12 +148,27 @@ struct CGRect GSEventGetLocationInWindow(struct __GSEvent *ev);
 	[super mouseDown:event];
 }
 
+BOOL mouseDragged = YES;
+
 - (void)mouseDragged:(struct __GSEvent *)event
 {
-	NSLog(@"MBGridView: mouseDragged:");
-	GSEventGetLocationInWindow(event).origin;
+	struct CGRect rect = GSEventGetLocationInWindow(event);
+	NSLog(@"MBGridView: mouseDragged:%d, %d", rect.origin.x, rect.origin.y);
+	CGPointMake(rect.origin.x, rect.origin.y);
+	
+	int xPos = (int)((rect.origin.x/_frame.size.width) * GRID_WIDTH);
+	int yPos = (int)((rect.origin.y/_frame.size.height) * GRID_HEIGHT);
+	
+	if(xPos >= GRID_WIDTH || yPos >= GRID_HEIGHT) return;
+	
+	//x value first.	
+	NSNumber *new = [[NSNumber alloc] initWithBool:repeatAction];
+	
+	[[data objectAtIndex:xPos] replaceObjectAtIndex:yPos withObject:new];
+	
+	[new release];
 	[self setNeedsDisplay];
-	[super mouseDragged:event];
+	[super mouseDown:event];
 }
 
 - (void)mouseUp:(struct __GSEvent *)event
