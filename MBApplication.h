@@ -7,9 +7,10 @@
 #import <UIKit/UIImageAndTextTableCell.h>
 #import <UIKit/UISliderControl.h>
 
-#import "MBApplication.h"
+#import "MBHeartbeat.h"
 
 @interface MBApplication : UIApplication {
+	MBHeartbeat *heartbeat;
 }
 
 - (void)setUpUI;

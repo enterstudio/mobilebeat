@@ -65,6 +65,11 @@
 	[mainView addSubview:grid];
 	//[mainView addSubview:control];
 	[window setContentView:mainView];
+	
+	heartbeat = [[MBHeartbeat alloc] initWithBPM:60];
+	
+	[heartbeat setGridView:grid];
+	[heartbeat startBeat];
 }
 
 @end

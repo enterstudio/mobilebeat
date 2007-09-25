@@ -4,6 +4,8 @@
 
 #import "MBGridView.h"
 
+#include "math.h"
+
 #import <UIKit/UIBezierPath.h>
 
 #define GRID_WIDTH 8
@@ -26,6 +28,7 @@ struct CGRect GSEventGetLocationInWindow(struct __GSEvent *ev);
 	//NSLog(@"IFTweetKeyboard: initWithFrame: editingDelegate = %@", [[self defaultTextTraits] editingDelegate]);
 	
 	_frame = frame;
+	playheadPosition = 0.0;
 	
 	int i,j;
 	data = [[NSMutableArray alloc] initWithCapacity:GRID_WIDTH];
@@ -53,8 +56,14 @@ struct CGRect GSEventGetLocationInWindow(struct __GSEvent *ev);
 	[self _drawPlayhead];
 }
 
-- (void)setTime:(float)time{
-	//time is a number between 0 and 1.
+- (void)setTime:(float)newTime{
+	newTime = fmod(newTime, 1);
+	playheadPosition = newTime;
+	[self setNeedsDisplay];
+}
+
+- (float)time{
+	return playheadPosition;
 }
 
 - (void)_drawGrid{
@@ -120,6 +129,17 @@ struct CGRect GSEventGetLocationInWindow(struct __GSEvent *ev);
 
 - (void)_drawPlayhead{
 	//blah.
+	float grayArray[4] = { 1.0f, 1.0f, 1.0f, 0.5f };
+	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+	CGContextSetFillColorWithColor( UICurrentContext(), CGColorCreate(colorSpace, grayArray) );
+	
+	UIBezierPath *path = [UIBezierPath bezierPath];
+	[path setLineWidth:1];
+	
+	[path moveToPoint:CGPointMake(_frame.size.width * playheadPosition, 0)];
+	[path lineToPoint:CGPointMake(_frame.size.width * playheadPosition, _frame.size.height)];
+	
+	[path stroke];
 }
 
 BOOL repeatAction;

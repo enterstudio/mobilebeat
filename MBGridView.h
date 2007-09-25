@@ -13,7 +13,12 @@
 	struct CGRect _frame;
 	
 	NSMutableArray *data;
+	
+	float playheadPosition;
 }
+
+- (void)setTime:(float)newTime;
+- (float)time;
 
 - (void)_drawGrid;
 - (void)_drawFilledIn;
