@@ -98,15 +98,18 @@ struct CGRect GSEventGetLocationInWindow(struct __GSEvent *ev);
 
 - (void)_drawFilledIn{
 	//go through and draw fill in the ones that should be filled in.
-	float blueArray[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
+	float blueArray[4] = { .2353f, .6627f, 1.0f, 1.0f };
 	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-	CGContextSetFillColorWithColor( UICurrentContext(), CGColorCreate(colorSpace, blueArray) );
+	CGColorRef begin = CGColorCreate(colorSpace, blueArray);
+	
+	float blueArray2[4] = { .0745f, .349f, .9294f, 1.0f };
+	CGColorRef end = CGColorCreate(colorSpace, blueArray2);
 	
 	// + (id)aquaSelectedGradient;
 	// + (id)aquaNormalGradient;
 	// + (id)aquaPressedGradient;
 	
-	CTGradient *gradient = [CTGradient aquaSelectedGradient];
+	CTGradient *gradient = [CTGradient gradientWithBeginningColor:begin endingColor:end];
 	
 	int i,j;
 	for(i = 0; i < [data count]; i++){
