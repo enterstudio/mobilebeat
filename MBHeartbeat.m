@@ -1,7 +1,7 @@
 #import "MBHeartbeat.h"
 #import "MBGridView.h"
 
-#define UPDATE_TIME .1
+#define UPDATE_TIME .05
 
 @implementation MBHeartbeat
 

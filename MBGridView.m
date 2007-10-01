@@ -8,6 +8,8 @@
 
 #import <UIKit/UIBezierPath.h>
 
+#import "CTGradient.h"
+
 #define GRID_WIDTH 8
 #define GRID_HEIGHT 8
 
@@ -20,12 +22,6 @@ struct CGRect GSEventGetLocationInWindow(struct __GSEvent *ev);
 - (id)initWithFrame:(struct CGRect)frame
 {
     if (!(self = [super initWithFrame:frame])) return nil;
-	
-	//NSLog(@"IFTweetKeyboard: initWithFrame:");
-	//[UIKeyboard initImplementationNow];
-	//NSLog(@"IFTweetKeyboard: initWithFrame: delegate = %@", [self delegate]);
-	//NSLog(@"IFTweetKeyboard: initWithFrame: defaultTextTraits = %@", [self defaultTextTraits]);
-	//NSLog(@"IFTweetKeyboard: initWithFrame: editingDelegate = %@", [[self defaultTextTraits] editingDelegate]);
 	
 	_frame = frame;
 	playheadPosition = 0.0;
@@ -43,14 +39,13 @@ struct CGRect GSEventGetLocationInWindow(struct __GSEvent *ev);
 		[temp release];
 	}
 	
-	float boxback[4] = {1, 1, 1, 1};
+	float boxback[4] = {.85, .85, .85, 1};
 	[self setBackgroundColor: CGColorCreate( CGColorSpaceCreateDeviceRGB(), boxback)];	
 	
 	return self;
 }
 
 - (void)drawRect:(struct CGRect)rect{
-	NSLog(@"BLAH");
 	[self _drawGrid];
 	[self _drawFilledIn];
 	[self _drawPlayhead];
@@ -66,10 +61,7 @@ struct CGRect GSEventGetLocationInWindow(struct __GSEvent *ev);
 	return playheadPosition;
 }
 
-- (void)_drawGrid{
-	//draw a grid of 1m x 1m squares.
-	
-	//NSRect bds = [self bounds];
+- (void)_drawGrid{	
 	struct CGRect bds = _frame;
 	int i, jump;
 	
@@ -110,16 +102,23 @@ struct CGRect GSEventGetLocationInWindow(struct __GSEvent *ev);
 	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 	CGContextSetFillColorWithColor( UICurrentContext(), CGColorCreate(colorSpace, blueArray) );
 	
+	// + (id)aquaSelectedGradient;
+	// + (id)aquaNormalGradient;
+	// + (id)aquaPressedGradient;
+	
+	CTGradient *gradient = [CTGradient aquaSelectedGradient];
+	
 	int i,j;
 	for(i = 0; i < [data count]; i++){
 		for(j = 0; j < [[data objectAtIndex:i] count]; j++){
 			if(![[[data objectAtIndex:i] objectAtIndex:j] boolValue]) continue;
-			struct CGRect rect = CGRectMake(i * (_frame.size.width / GRID_WIDTH),
-											j * (_frame.size.height / GRID_HEIGHT),
-											_frame.size.width / GRID_WIDTH,
-											_frame.size.height / GRID_HEIGHT);
+			struct CGRect rect = CGRectMake((float)i * (_frame.size.width / (float)GRID_WIDTH),
+											(float)j * (_frame.size.height / (float)GRID_HEIGHT),
+											_frame.size.width / (float)GRID_WIDTH,
+											_frame.size.height / (float)GRID_HEIGHT);
 			
-			CGContextFillRect( UICurrentContext(), rect );
+			[gradient fillRect:NSMakeRect(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height) angle:90.];
+			//CGContextFillRect( UICurrentContext(), rect );
 		}
 	}
 

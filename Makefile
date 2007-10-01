@@ -9,7 +9,8 @@ SOURCES=\
 	main.m \
 	MBHeartbeat.m \
 	MBGridView.m \
-	MBApplication.m
+	MBApplication.m \
+	CTGradient.m
 	
 LDFLAGS=-Wl,-syslibroot,/usr/local/arm-apple-darwin/heavenly -lobjc -ObjC \
 	-framework CoreFoundation \
@@ -90,7 +91,7 @@ package: $(APPNAME)
 	cp Info.plist $(APPNAME).app/Info.plist
 
 send: package
-	scp -rp $(APPNAME).app root@10.0.2.7:/Applications
+	scp -rp $(APPNAME).app root@192.168.1.101:/Applications
 	
 %.o:	%.m
 		$(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
