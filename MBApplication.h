@@ -9,8 +9,9 @@
 
 #import "MBHeartbeat.h"
 
-@interface MBApplication : UIApplication {
-	MBHeartbeat *heartbeat;
+@interface MBApplication : UIApplication
+{
+    MBHeartbeat *heartbeat;
 }
 
 - (void)setUpUI;

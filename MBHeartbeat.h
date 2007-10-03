@@ -10,10 +10,11 @@
 
 @interface MBHeartbeat : NSObject
 {
-	int beatsPerMinute;
-	
-	MBGridView *_gridView;
+    int beatsPerMinute;
+
+    MBGridView *_gridView;
 }
+
 - (id)initWithBPM:(int)bpm;
 
 - (void)startBeat;

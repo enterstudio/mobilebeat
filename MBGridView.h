@@ -10,11 +10,11 @@
 
 @interface MBGridView : UIControl
 {
-	struct CGRect _frame;
-	
-	NSMutableArray *data;
-	
-	float playheadPosition;
+    struct CGRect _frame;
+
+    NSMutableArray *data;
+
+    float playheadPosition;
 }
 
 - (void)setTime:(float)newTime;

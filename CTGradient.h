@@ -16,29 +16,28 @@
 //  Basically a copy and paste of CTGradient with some modifications to
 //  work on the iPhone.
 
-typedef struct _CTGradientElement 
-	{
-	float red, green, blue, alpha;
-	float position;
-	
-	struct _CTGradientElement *nextElement;
-	} CTGradientElement;
+typedef struct _CTGradientElement
+{
+    float red, green, blue, alpha;
+    float position;
+
+    struct _CTGradientElement *nextElement;
+} CTGradientElement;
 
 typedef enum  _CTBlendingMode
-	{
-	CTLinearBlendingMode,
-	CTChromaticBlendingMode,
-	CTInverseChromaticBlendingMode
-	} CTGradientBlendingMode;
-
+{
+    CTLinearBlendingMode,
+    CTChromaticBlendingMode,
+    CTInverseChromaticBlendingMode
+} CTGradientBlendingMode;
 
 @interface CTGradient : NSObject
-	{
-	CTGradientElement* elementList;
-	CTGradientBlendingMode blendingMode;
-	
-	CGFunctionRef gradientFunction;
-	}
+{
+    CTGradientElement* elementList;
+    CTGradientBlendingMode blendingMode;
+
+    CGFunctionRef gradientFunction;
+}
 
 + (id)gradientWithBeginningColor:(CGColorRef)begin endingColor:(CGColorRef)end;
 
@@ -67,12 +66,11 @@ typedef enum  _CTBlendingMode
 //- (NSColor *)colorStopAtIndex:(unsigned)index;
 //- (NSColor *)colorAtPosition:(float)position;
 
-
 - (void)drawSwatchInRect:(NSRect)rect;
-- (void)fillRect:(NSRect)rect angle:(float)angle;					//fills rect with axial gradient
-																	//	angle in degrees
-- (void)radialFillRect:(NSRect)rect;								//fills rect with radial gradient
-																	//  gradient from center outwards
+- (void)fillRect:(NSRect)rect angle:(float)angle; //fills rect with axial gradient
+                                                  //	angle in degrees
+- (void)radialFillRect:(NSRect)rect;              //fills rect with radial gradient
+                                                  //  gradient from center outwards
 //- (void)fillBezierPath:(NSBezierPath *)path angle:(float)angle;
 //- (void)radialFillBezierPath:(NSBezierPath *)path;
 
