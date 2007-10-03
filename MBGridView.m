@@ -68,7 +68,9 @@ struct CGRect GSEventGetLocationInWindow(struct __GSEvent *ev);
 {
     struct CGRect bds = _frame;
     float i, jump;
-
+	
+	CGContextSetShouldAntialias(UICurrentContext(), NO);
+	
     UIBezierPath *path = [UIBezierPath bezierPath];
     [path setLineWidth:1];
 
@@ -97,6 +99,8 @@ struct CGRect GSEventGetLocationInWindow(struct __GSEvent *ev);
     [path lineToPoint:CGPointMake(bds.size.width-1, 0)];
 
     [path stroke];
+
+	CGContextSetShouldAntialias(UICurrentContext(), YES);
 }
 
 - (void)_drawFilledIn
