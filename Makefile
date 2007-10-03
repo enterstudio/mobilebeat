@@ -91,7 +91,7 @@ package: $(APPNAME)
 	cp Info.plist $(APPNAME).app/Info.plist
 
 send: package
-	scp -rp $(APPNAME).app root@192.168.1.101:/Applications
+	scp -rp $(APPNAME).app root@10.0.2.7:/Applications
 	
 %.o:	%.m
 		$(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
