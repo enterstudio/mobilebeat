@@ -27,7 +27,7 @@
 {
     NSLog(@"update");
     float currentTime = [_gridView time];
-    float secondsLong = (beatsPerMinute * 2) / 60;
+    float secondsLong = ((float)120 / beatsPerMinute);
 
     [_gridView setTime:currentTime + (UPDATE_TIME / secondsLong)];
 }
