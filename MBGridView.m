@@ -53,7 +53,9 @@ int lastMilestone;
 
 	//check if we have reached a new milestone and send a message to
 	//our delegate if we have.
-	if((int)(newTime * (float)GRID_WIDTH) > lastMilestone || lastMilestone == (GRID_WIDTH-1)){
+	int section = (int)(newTime * (float)GRID_WIDTH);
+	if(section == 0 && lastMilestone == 7) lastMilestone = -1;
+	if(section > lastMilestone){
 		NSLog(@"newTime: %f lastMilestone: %d", newTime, lastMilestone);
 		lastMilestone = (int)(newTime * (float)GRID_WIDTH);
 		if(_delegate != nil && [_delegate respondsToSelector:@selector(milestoneReachedWithData:)]){
