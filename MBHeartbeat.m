@@ -1,5 +1,4 @@
 #import "MBHeartbeat.h"
-#import "MBGridView.h"
 
 #define UPDATE_TIME .05
 
@@ -25,7 +24,7 @@
 
 - (void)update:(NSTimer *)timer
 {
-    NSLog(@"update");
+    //NSLog(@"update");
     float currentTime = [_gridView time];
     float secondsLong = ((float)120 / beatsPerMinute);
 

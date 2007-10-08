@@ -1,14 +1,4 @@
-#import <CoreFoundation/CoreFoundation.h>
-#import <CoreGraphics/CGColor.h>
-#import <CoreGraphics/CGGeometry.h>
-
 #import "MBGridView.h"
-
-#include "math.h"
-
-#import <UIKit/UIBezierPath.h>
-
-#import "CTGradient.h"
 
 #define GRID_WIDTH 8
 #define GRID_HEIGHT 8
@@ -19,13 +9,17 @@ struct CGRect GSEventGetLocationInWindow(struct __GSEvent *ev);
 
 @implementation MBGridView
 
+//keep track of the last milestone we reached.
+int lastMilestone;
+
 - (id)initWithFrame:(struct CGRect)frame
 {
     if (!(self = [super initWithFrame:frame])) return nil;
 
     _frame = frame;
     playheadPosition = 0.0;
-
+	lastMilestone = -1;
+	
     int i,j;
     data = [[NSMutableArray alloc] initWithCapacity:GRID_WIDTH];
     for(i = 0; i < GRID_WIDTH; i++) {
@@ -55,6 +49,17 @@ struct CGRect GSEventGetLocationInWindow(struct __GSEvent *ev);
 - (void)setTime:(float)newTime
 {
     newTime = fmod(newTime, 1);
+
+	//check if we have reached a new milestone and send a message to
+	//our delegate if we have.
+	if(newTime * (float)GRID_WIDTH > lastMilestone){
+		lastMilestone = (int)(newTime * (float)GRID_WIDTH);
+		if(_delegate != nil && [_delegate respondsToSelector:@selector(milestoneReachedWithData:)]){
+			//send the delegate the array with our boolean values in it.
+			[_delegate milestoneReachedWithData:[data objectAtIndex:lastMilestone]];
+		}
+	}
+
     playheadPosition = newTime;
     [self setNeedsDisplay];
 }
@@ -62,6 +67,16 @@ struct CGRect GSEventGetLocationInWindow(struct __GSEvent *ev);
 - (float)time
 {
     return playheadPosition;
+}
+
+- (void)setDelegate:(id)delegate
+{
+	[_delegate release];
+	_delegate = [delegate retain];
+}
+
+- (id)delegate{
+	return _delegate;
 }
 
 - (void)_drawGrid
@@ -206,6 +221,12 @@ BOOL mouseDragged = YES;
 {
     NSLog(@"MBGridView: mouseUp:");
     [super mouseUp:event];
+}
+
+- (void)dealloc{
+	[_delegate release];
+	[data release];
+	[super dealloc];
 }
 
 @end

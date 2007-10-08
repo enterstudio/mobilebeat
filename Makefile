@@ -1,7 +1,8 @@
 CC=/usr/local/arm-apple-darwin/bin/gcc
 CXX=/usr/local/arm-apple-darwin/bin/g++
-CFLAGS=-fsigned-char
-LDFLAGS=-Wl,-syslibroot,/usr/local/arm-apple-darwin/heavenly -lobjc -ObjC -framework CoreFoundation -framework Foundation -framework UIKit -framework LayerKit -framework CoreGraphics -framework GraphicsServices -framework Celestial -framework MusicLibrary
+CFLAGS=-fsigned-char -Wall -O3 -I. -Iext/include -I/usr/local/arm-apple-darwin/arm-apple-darwin/include
+
+LDFLAGS=-Wl,-syslibroot,/usr/local/arm-apple-darwin/heavenly -lobjc -ObjC -framework CoreFoundation -framework Foundation -framework UIKit -framework LayerKit -framework CoreGraphics -framework GraphicsServices -framework Celestial -framework AudioToolbox -framework MusicLibrary -lpthread -Lext/libs -lintl -lglib -lsndfile
 
 APPNAME=MobileBeat
 
@@ -10,56 +11,60 @@ SOURCES=\
 	MBHeartbeat.m \
 	MBGridView.m \
 	MBApplication.m \
-	CTGradient.m
+	CTGradient.m \
+	MBAudioCore.m \
+	audiocore/audiocore.c \
+	audiocore/stack.c \
+	audiocore/sampleid.c	
 	
-LDFLAGS=-Wl,-syslibroot,/usr/local/arm-apple-darwin/heavenly -lobjc -ObjC \
-	-framework CoreFoundation \
-	-framework Foundation \
-	-framework UIKit \
-	-framework LayerKit \
-	\
-	-framework AddressBook \
-	-framework AddressBookUI \
-	-framework AppSupport \
-	-framework AudioToolbox \
-	-framework BluetoothManager \
-	-framework Calendar \
-	-framework Camera \
-	-framework Celestial \
-	-framework CoreAudio \
-	-framework CoreGraphics \
-	-framework CoreSurface \
-	-framework CoreTelephony \
-	-framework CoreVideo \
-	-framework DeviceLink \
-	-framework GMM \
-	-framework GraphicsServices \
-	-framework IAP \
-	-framework IOKit \
-	-framework IOMobileFramebuffer \
-	-framework ITSync \
-	-framework JavaScriptCore \
-	-framework MBX2D \
-	-framework MBXConnect \
-	-framework MeCCA \
-	-framework Message \
-	-framework MessageUI \
-	-framework MobileBluetooth \
-	-framework MobileMusicPlayer \
-	-framework MoviePlayerUI \
-	-framework MultitouchSupport \
-	-framework MusicLibrary \
-	-framework OfficeImport \
-	-framework OpenGLES \
-	-framework PhotoLibrary \
-	-framework Preferences \
-	-framework Security \
-	-framework System \
-	-framework SystemConfiguration \
-	-framework TelephonyUI \
-	-framework URLify \
-	-framework WebCore \
-	-framework WebKit \
+#LDFLAGS=-Wl,-syslibroot,/usr/local/arm-apple-darwin/heavenly -lobjc -ObjC \
+#	-framework CoreFoundation \
+#	-framework Foundation \
+#	-framework UIKit \
+#	-framework LayerKit \
+#	\
+#	-framework AddressBook \
+#	-framework AddressBookUI \
+#	-framework AppSupport \
+#	-framework AudioToolbox \
+#	-framework BluetoothManager \
+#	-framework Calendar \
+#	-framework Camera \
+#	-framework Celestial \
+#	-framework CoreAudio \
+#	-framework CoreGraphics \
+#	-framework CoreSurface \
+#	-framework CoreTelephony \
+#	-framework CoreVideo \
+#	-framework DeviceLink \
+#	-framework GMM \
+#	-framework GraphicsServices \
+#	-framework IAP \
+#	-framework IOKit \
+#	-framework IOMobileFramebuffer \
+#	-framework ITSync \
+#	-framework JavaScriptCore \
+#	-framework MBX2D \
+#	-framework MBXConnect \
+#	-framework MeCCA \
+#	-framework Message \
+#	-framework MessageUI \
+#	-framework MobileBluetooth \
+#	-framework MobileMusicPlayer \
+#	-framework MoviePlayerUI \
+#	-framework MultitouchSupport \
+#	-framework MusicLibrary \
+#	-framework OfficeImport \
+#	-framework OpenGLES \
+#	-framework PhotoLibrary \
+#	-framework Preferences \
+#	-framework Security \
+#	-framework System \
+#	-framework SystemConfiguration \
+#	-framework TelephonyUI \
+#	-framework URLify \
+#	-framework WebCore \
+#	-framework WebKit \
 
 WRAPPER_NAME=$(APPNAME).app
 EXECUTABLE_NAME=$(APPNAME)
@@ -77,7 +82,10 @@ PRODUCT_ABS=$(APP_ABS)/$(EXECUTABLE_NAME)
 
 LD=$(CC)
 
-all:	$(APPNAME)
+all:	$(ENV) $(APPNAME)
+
+$(ENV)	:
+	export MACOSX_DEPLOYMENT_TARGET="10.5"
 
 $(APPNAME):	$(OBJECTS)
 	#$(LD) $(LDFLAGS) -o $(PRODUCT_ABS) $(OBJECTS_ABS)
@@ -88,10 +96,11 @@ package: $(APPNAME)
 	mkdir -p $(APPNAME).app
 	cp $(APPNAME) $(APPNAME).app/$(APPNAME)
 	#cp *.png $(APPNAME).app/
+	cp sounds/*.wav $(APPNAME).app/
 	cp Info.plist $(APPNAME).app/Info.plist
 
 send: package
-	scp -rp $(APPNAME).app root@10.0.2.7:/Applications
+	scp -rp $(APPNAME).app root@192.168.1.101:/Applications
 	
 %.o:	%.m
 		$(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@

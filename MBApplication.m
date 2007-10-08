@@ -1,27 +1,6 @@
-#import <CoreFoundation/CoreFoundation.h>
-#import <Foundation/Foundation.h>
-#import <UIKit/CDStructures.h>
-#import <UIKit/UITextField.h>
-#import <UIKit/UITextLabel.h>
-#import <UIKit/UITextView.h>
-#import <UIKit/UIKeyboard.h>
-#import <UIKit/UINavigationBar.h>
-#import <UIKit/UIWindow.h>
-
-#import <UIKit/UIView-Hierarchy.h>
-#import <UIKit/UIHardware.h>
-#import <UIKit/UITableCell.h>
-#import <UIKit/UITableColumn.h>
-#import <UIKit/UITouchDiagnosticsLayer.h>
-#import <UIKit/UIFontChooser.h>
-
-#import "MBGridView.h"
 #import "MBApplication.h"
 
 @implementation MBApplication
-
-#define BUTTON_WIDTH 80
-#define BUTTON_HEIGHT 80
 
 - (id)init{
 	if(!(self = [super init])) return nil;
@@ -36,6 +15,30 @@
 - (void)setUpUI
 {
 	
+}
+
+- (void)playSoundFile:(NSString *)path{
+	// Set up the playback
+	NSError *error;
+	AVItem *item;
+	AVController *av = [[AVController alloc] init];
+	item = [[AVItem alloc] initWithPath:path error:&error];
+	[av setCurrentItem:item preservingRate:YES];
+	BOOL ok = [av play:nil];
+	//[av release];
+}
+
+- (void)milestoneReachedWithData:(NSArray *)data{
+	//data should be an array of NSNumber bools that tell us what things
+	//are enabled. Send those through the MBAudioCore class.
+	//NSLog(@"milestone reached");
+	//[self playSoundFile:@"/Applications/MobileBeat.app/beep.caf"];
+	int i;
+	for(i = 0; i < [data count]; i++){
+		if([[data objectAtIndex:i] boolValue]){
+			[core playItem:i];
+		}
+	}
 }
 
 - (void) applicationDidFinishLaunching: (id) unused
@@ -62,10 +65,14 @@
 	//create the MBGridView
 	MBGridView *grid = [[MBGridView alloc] initWithFrame:CGRectMake(0.0,0.0,rect.size.width,rect.size.width-37)];
 	
+	//now we will get milestone reached data.
+	[grid setDelegate:self];
+	
 	[mainView addSubview:grid];
 	//[mainView addSubview:control];
 	[window setContentView:mainView];
 	
+	core = [[MBAudioCore alloc] init];
 	heartbeat = [[MBHeartbeat alloc] initWithBPM:60];
 	
 	[heartbeat setGridView:grid];
