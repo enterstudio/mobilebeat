@@ -48,11 +48,13 @@ int lastMilestone;
 
 - (void)setTime:(float)newTime
 {
+	NSLog(@"setTime: %f", newTime);
     newTime = fmod(newTime, 1);
 
 	//check if we have reached a new milestone and send a message to
 	//our delegate if we have.
-	if(newTime * (float)GRID_WIDTH > lastMilestone || lastMilestone == GRID_WIDTH){
+	if((int)(newTime * (float)GRID_WIDTH) > lastMilestone || lastMilestone == (GRID_WIDTH-1)){
+		NSLog(@"newTime: %f lastMilestone: %d", newTime, lastMilestone);
 		lastMilestone = (int)(newTime * (float)GRID_WIDTH);
 		if(_delegate != nil && [_delegate respondsToSelector:@selector(milestoneReachedWithData:)]){
 			//send the delegate the array with our boolean values in it.

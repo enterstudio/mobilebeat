@@ -12,10 +12,5 @@ sampleid_t sampleDB[] =
     { 7 | SAMPLE_ONE_SHOT,	"/Applications/MobileBeat.app/fx1.wav"		},
     { 8 | SAMPLE_ONE_SHOT,	"/Applications/MobileBeat.app/fx2.wav"		},
 
-    { 9 | SAMPLE_LOOP,		"/Applications/MobileBeat.app/loop1.wav"	},
-    { 10 | SAMPLE_LOOP,		"/Applications/MobileBeat.app/loop2.wav"	},
-    { 11 | SAMPLE_LOOP,		"/Applications/MobileBeat.app/loop3.wav"	},
-    { 12 | SAMPLE_LOOP,		"/Applications/MobileBeat.app/loop4.wav"	},
-
-    { 0,	0								}
+    { 0,					0											}
   };
