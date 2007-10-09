@@ -13,6 +13,7 @@
 #import <Celestial/AVItem.h>
 
 #import "MBGridView.h"
+#import "MBKeyboardView.h"
 #import "MBHeartbeat.h"
 #import "MBAudioCore.h"
 

@@ -10,6 +10,7 @@ SOURCES=\
 	main.m \
 	MBHeartbeat.m \
 	MBGridView.m \
+	MBKeyboardView.m \
 	MBApplication.m \
 	CTGradient.m \
 	MBAudioCore.m \

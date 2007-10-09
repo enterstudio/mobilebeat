@@ -69,8 +69,13 @@
 	[grid setDelegate:self];
 	
 	[mainView addSubview:grid];
-	//[mainView addSubview:control];
+	[grid release];
+	
+	MBKeyboardView *keyboard = [[MBKeyboardView alloc] initWithFrame:CGRectMake(0.0,rect.size.height-100,rect.size.width,100)];
+	[mainView addSubview:keyboard];
+	
 	[window setContentView:mainView];
+	[mainView release];
 	
 	core = [[MBAudioCore alloc] init];
 	heartbeat = [[MBHeartbeat alloc] initWithBPM:60];

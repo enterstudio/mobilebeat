@@ -48,7 +48,7 @@ int lastMilestone;
 
 - (void)setTime:(float)newTime
 {
-	NSLog(@"setTime: %f", newTime);
+	//NSLog(@"setTime: %f", newTime);
     newTime = fmod(newTime, 1);
 
 	//check if we have reached a new milestone and send a message to
@@ -56,7 +56,7 @@ int lastMilestone;
 	int section = (int)(newTime * (float)GRID_WIDTH);
 	if(section == 0 && lastMilestone == 7) lastMilestone = -1;
 	if(section > lastMilestone){
-		NSLog(@"newTime: %f lastMilestone: %d", newTime, lastMilestone);
+		//NSLog(@"newTime: %f lastMilestone: %d", newTime, lastMilestone);
 		lastMilestone = (int)(newTime * (float)GRID_WIDTH);
 		if(_delegate != nil && [_delegate respondsToSelector:@selector(milestoneReachedWithData:)]){
 			//send the delegate the array with our boolean values in it.
@@ -176,7 +176,7 @@ BOOL repeatAction;
 - (void)mouseDown:(struct __GSEvent *)event
 {
     struct CGRect rect = GSEventGetLocationInWindow(event);
-    NSLog(@"MBGridView: mouseDown:%d, %d", rect.origin.x, rect.origin.y);
+    //NSLog(@"MBGridView: mouseDown:%d, %d", rect.origin.x, rect.origin.y);
     CGPointMake(rect.origin.x, rect.origin.y);
 
     int xPos = (int)((rect.origin.x/_frame.size.width) * GRID_WIDTH);
@@ -203,7 +203,7 @@ BOOL mouseDragged = YES;
 - (void)mouseDragged:(struct __GSEvent *)event
 {
     struct CGRect rect = GSEventGetLocationInWindow(event);
-    NSLog(@"MBGridView: mouseDragged:%d, %d", rect.origin.x, rect.origin.y);
+    //NSLog(@"MBGridView: mouseDragged:%d, %d", rect.origin.x, rect.origin.y);
     CGPointMake(rect.origin.x, rect.origin.y);
 
     int xPos = (int)((rect.origin.x/_frame.size.width) * GRID_WIDTH);
@@ -223,7 +223,7 @@ BOOL mouseDragged = YES;
 
 - (void)mouseUp:(struct __GSEvent *)event
 {
-    NSLog(@"MBGridView: mouseUp:");
+    //NSLog(@"MBGridView: mouseUp:");
     [super mouseUp:event];
 }
 
