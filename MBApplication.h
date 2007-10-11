@@ -1,6 +1,7 @@
 #import <CoreFoundation/CoreFoundation.h>
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <UIKit/UISliderControl.h>
 #import <UIKit/CDStructures.h>
 #import <UIKit/UIWindow.h>
 #import <UIKit/UIView-Hierarchy.h>
@@ -21,6 +22,8 @@
 {
     MBHeartbeat *heartbeat;
 	MBAudioCore *core;
+	
+	UISliderControl *slider;
 }
 
 - (void)setUpUI;

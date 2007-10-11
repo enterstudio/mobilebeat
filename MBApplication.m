@@ -41,6 +41,11 @@
 	}
 }
 
+- (void)handleBPMChange:(id)sender{
+	//NSLog(@"sender value: %f", [slider value]);
+	[heartbeat setBPM:(int)[slider value]];
+}
+
 - (void) applicationDidFinishLaunching: (id) unused
 {
 	UIWindow *window;
@@ -70,6 +75,17 @@
 	
 	[mainView addSubview:grid];
 	[grid release];
+	
+	slider = [[UISliderControl alloc] initWithFrame:CGRectMake(10.0, rect.size.height-150, rect.size.width-20, 20)];
+	
+	[slider setMaxValue:180.0f];
+	[slider setMinValue:30.0f];
+	[slider setValue:60.0f];
+	[slider setShowValue:YES];
+	
+	[slider addTarget:self action:@selector(handleBPMChange:) forEvents:7];
+	
+	[mainView addSubview:slider];
 	
 	MBKeyboardView *keyboard = [[MBKeyboardView alloc] initWithFrame:CGRectMake(0.0,rect.size.height-100,rect.size.width,100)];
 	[mainView addSubview:keyboard];
