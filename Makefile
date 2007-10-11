@@ -96,7 +96,7 @@ package: $(APPNAME)
 	rm -fr $(APPNAME).app
 	mkdir -p $(APPNAME).app
 	cp $(APPNAME) $(APPNAME).app/$(APPNAME)
-	#cp *.png $(APPNAME).app/
+	cp *.png $(APPNAME).app/
 	cp sounds/*.wav $(APPNAME).app/
 	cp Info.plist $(APPNAME).app/Info.plist
 
