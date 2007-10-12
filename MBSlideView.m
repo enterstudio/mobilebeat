@@ -128,7 +128,16 @@ struct CGPoint GSEventGetOuterMostPathPosition(struct __GSEvent *ev);
 
 - (void)transitionViewDidComplete:(UITransitionView*)view fromView:(UIView*)from toView:(UIView*)to{
 	//NSLog(@"1FINISHED transitioning to: %d", _currentIndex);
+	UIAlertSheet *alertSheet = [[UIAlertSheet alloc] initWithFrame:CGRectMake(0, 240, 320, 240)];
+	[alertSheet setTitle:@"Alert Title"];
+	[alertSheet setBodyText:@"This is an alert."];
+	[alertSheet addButtonWithTitle:@"Yes"];
+	[alertSheet addButtonWithTitle:@"No"];
+	[alertSheet setDelegate:self];
+	[alertSheet presentSheetFromAboveView:self];
+	
 	[self setNeedsDisplay];
+
 }
 
 - (void)transitionViewDidComplete:(UITransitionView*)view finished:(BOOL)flag{

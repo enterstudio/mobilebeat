@@ -6,6 +6,7 @@
 #import <UIKit/UIControl.h>
 #import <UIKit/UIBezierPath.h>
 #import <UIKit/UITransitionView.h>
+#import <UIKit/UIAlertSheet.h>
 
 typedef enum
 {
