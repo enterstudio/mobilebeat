@@ -10,6 +10,7 @@ SOURCES=\
 	main.m \
 	MBHeartbeat.m \
 	MBGridView.m \
+	MBSlideView.m \
 	MBKeyboardView.m \
 	MBApplication.m \
 	CTGradient.m \
@@ -98,10 +99,11 @@ package: $(APPNAME)
 	cp $(APPNAME) $(APPNAME).app/$(APPNAME)
 	cp *.png $(APPNAME).app/
 	cp sounds/*.wav $(APPNAME).app/
+	cp images/*.png $(APPNAME).app/
 	cp Info.plist $(APPNAME).app/Info.plist
 
 send: package
-	scp -rp $(APPNAME).app root@10.0.2.2:/Applications
+	scp -rp $(APPNAME).app root@10.0.2.7:/Applications
 	
 %.o:	%.m
 		$(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@

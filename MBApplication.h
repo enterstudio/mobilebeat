@@ -17,6 +17,7 @@
 #import "MBKeyboardView.h"
 #import "MBHeartbeat.h"
 #import "MBAudioCore.h"
+#import "MBSlideView.h"
 
 @interface MBApplication : UIApplication
 {

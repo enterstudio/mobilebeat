@@ -60,6 +60,8 @@
 	
 	struct CGRect rect = [UIHardware fullScreenApplicationContentRect];
 	
+	rect.size.height = rect.size.height - 10;
+	
 	rect.origin.x = rect.origin.y = 0.0f;
 	UIView *mainView;
 	mainView = [[UIView alloc] initWithFrame: rect];
@@ -78,26 +80,47 @@
 	
 	slider = [[UISliderControl alloc] initWithFrame:CGRectMake(10.0, rect.size.height-150, rect.size.width-20, 20)];
 	
-	[slider setMaxValue:180.0f];
-	[slider setMinValue:30.0f];
-	[slider setValue:60.0f];
+	[slider setMaxValue:120];
+	[slider setMinValue:30];
+	[slider setNumberOfTickMarks:90];
+	[slider setAllowsTickMarkValuesOnly:YES];
+	[slider setValue:60];
 	[slider setShowValue:YES];
 	
 	[slider addTarget:self action:@selector(handleBPMChange:) forEvents:7];
 	
 	[mainView addSubview:slider];
 	
-	MBKeyboardView *keyboard = [[MBKeyboardView alloc] initWithFrame:CGRectMake(0.0,rect.size.height-100,rect.size.width,100)];
-	[mainView addSubview:keyboard];
-	
-	[window setContentView:mainView];
+	MBSlideView *slideView = [[MBSlideView alloc] initWithFrame:rect];
+	[slideView addView:mainView];
 	[mainView release];
+	
+	
+	UIView *secondView = [[UIView alloc] initWithFrame:rect];
+	MBKeyboardView *keyboard = [[MBKeyboardView alloc] initWithFrame:CGRectMake(0.0,rect.size.height-100,rect.size.width,100)];
+	[secondView addSubview:keyboard];
+	
+	[slideView addView:secondView];
+	[secondView release];
+	
+	UIView *thirdView = [[UIView alloc] initWithFrame:rect];
+	UISliderControl *slider1 = [[UISliderControl alloc] initWithFrame:CGRectMake(10.0, rect.size.height-150, rect.size.width-20, 20)];
+	[thirdView addSubview:slider1];
+	[slider1 release];
+	
+	[slideView addView:thirdView];
+	[thirdView release];
+	
+	[window setContentView:slideView];
 	
 	core = [[MBAudioCore alloc] init];
 	heartbeat = [[MBHeartbeat alloc] initWithBPM:60];
 	
 	[heartbeat setGridView:grid];
 	[heartbeat startBeat];
+	
+	//go to the first view.
+	[slideView selectViewAtIndex:0];
 }
 
 @end
